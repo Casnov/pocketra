@@ -3,7 +3,7 @@ name: Build Android arm32
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-android-arm32:
@@ -26,13 +26,12 @@ jobs:
           pip install scons
 
       - name: Set up Android NDK
-        uses: nsetup/setup-android-ndk@v1
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25c
 
       - name: Build C++ Native Components (gdext/sim)
         run: |
-          # Build the native library for armeabi-v7a (arm32)
           scons platform=android target=template_release arch=arm32
 
       - name: Upload Compiled Binaries
