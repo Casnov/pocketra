@@ -30,8 +30,9 @@ jobs:
         with:
           ndk-version: r25c
 
-      - name: Build C++ Native Components (gdext/sim)
+      - name: Build C++ Native Components (gdext)
         run: |
+          cd gdext
           scons platform=android target=template_release arch=arm32
 
       - name: Upload Compiled Binaries
@@ -39,5 +40,5 @@ jobs:
         with:
           name: pocketra-android-arm32
           path: |
-            **/*.so
-            bin/
+            gdext/**/*.so
+            gdext/bin/
