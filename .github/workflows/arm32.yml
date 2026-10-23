@@ -43,6 +43,11 @@ jobs:
           
           # 2. Build for Linux so the headless Godot editor can load classes during export
           scons platform=linux target=template_release arch=x86_64
+          
+          # 3. Ensure the compiled binaries are in game/bin/ where rasim.gdextension expects them
+          # (Modify these copy paths if your SCons setup outputs them elsewhere)
+          mkdir -p ../game/bin
+          cp -r bin/* ../game/bin/ || true
 
       - name: Download and Setup Godot Engine & Android Templates
         run: |
