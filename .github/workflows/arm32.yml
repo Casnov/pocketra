@@ -39,6 +39,10 @@ jobs:
         run: |
           cd gdext
           scons platform=android target=template_release arch=arm32
+        
+# Debug: List contents to see where binaries are generated
+          echo "Listing gdext directory contents:"
+          find . -maxdepth 3
 
       - name: Upload Compiled Binaries
         uses: actions/upload-artifact@v4
