@@ -1,4 +1,4 @@
-name: Build Android arm32
+name: Build Android APK
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-android-arm32:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,14 +39,38 @@ jobs:
         run: |
           cd gdext
           scons platform=android target=template_release arch=arm32
-          
-          # Debug: Verify the shared library was created in game/bin/
-          echo "Checking game/bin/ contents:"
-          find ../game/bin -name "*.so"
 
-      - name: Upload Compiled Binaries
+      # --- NEW: GODOT EXPORT STEP ---
+      - name: Download and Setup Godot Engine
+        run: |
+          # Change GODOT_VERSION to match your project's version (e.g., 4.3, 4.4, etc.)
+          GODOT_VERSION="4.3-stable"
+          
+          # Download Godot Linux server/headless binary and export templates
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz
+          
+          unzip Godot_v${GODOT_VERSION}_linux.x86_64.zip
+          mv Godot_v${GODOT_VERSION}_linux.x86_64 /usr/local/bin/godot
+          
+          # Install export templates for Godot
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION%.*}
+          unzip Godot_v${GODOT_VERSION}_export_templates.tpz
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION%.*}/
+
+      - name: Export Android APK
+        run: |
+          mkdir -p game/build
+          cd game
+          
+          # Force Godot to pre-import assets so the export doesn't crash on headless runner
+          godot --headless --editor --quit || true
+          
+          # Export the release APK using your export preset name (e.g., "Android")
+          godot --headless --export-release "Android" build/pocketra.apk
+
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pocketra-android-arm32
-          path: |
-            game/bin/**/*.so
+          name: pocketra-android-apk
+          path: game/build/pocketra.apk
