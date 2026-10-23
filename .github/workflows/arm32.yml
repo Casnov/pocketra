@@ -41,11 +41,10 @@ jobs:
           # 1. Build for Android arm32
           scons platform=android target=template_release arch=arm32
           
-          # 2. Build for Linux so the headless Godot editor can load classes during export
+          # 2. Build for Linux so the headless Godot editor can load classes
           scons platform=linux target=template_release arch=x86_64
           
-          # 3. Ensure the compiled binaries are in game/bin/ where rasim.gdextension expects them
-          # (Modify these copy paths if your SCons setup outputs them elsewhere)
+          # 3. Copy binaries straight into game/bin/ where Godot and rasim.gdextension expect them
           mkdir -p ../game/bin
           cp -r bin/* ../game/bin/ || true
 
@@ -72,7 +71,8 @@ jobs:
           mkdir -p game/build
           cd game
           
-          # Initialize the project once in headless mode to clear script parse errors & import assets
+          # Initialize the project in headless mode (now that the .so files are present, 
+          # RaContent and VqaPlayer will load successfully, clearing parse and translation errors)
           godot --headless --editor --quit || true
           
           # Automatically install the Android build template (generates game/android/ locally)
