@@ -41,8 +41,8 @@ jobs:
           # 1. Build for Android arm32
           scons platform=android target=template_release arch=arm32
           
-          # 2. Build for Linux x86_64 so the headless Godot editor can load classes during export
-          scons platform=linuxbsd target=template_release arch=x86_64
+          # 2. Build for Linux so the headless Godot editor can load classes during export
+          scons platform=linux target=template_release arch=x86_64
 
       - name: Download and Setup Godot Engine & Android Templates
         run: |
