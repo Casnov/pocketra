@@ -44,7 +44,7 @@ jobs:
       - name: Download and Setup Godot Engine
         run: |
           # Change GODOT_VERSION to match your project's version (e.g., 4.3, 4.4, etc.)
-          GODOT_VERSION="4.3-stable"
+          GODOT_VERSION="4.7-stable"
           
           # Download Godot Linux server/headless binary and export templates
           wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip
