@@ -40,14 +40,13 @@ jobs:
           cd gdext
           scons platform=android target=template_release arch=arm32
           
-          # Debug: List contents to see where binaries are generated
-          echo "Listing gdext directory contents:"
-          find . -maxdepth 3
+          # Debug: Verify the shared library was created in game/bin/
+          echo "Checking game/bin/ contents:"
+          find ../game/bin -name "*.so"
 
       - name: Upload Compiled Binaries
         uses: actions/upload-artifact@v4
         with:
           name: pocketra-android-arm32
           path: |
-            gdext/**/*.so
-            gdext/bin/
+            game/bin/**/*.so
