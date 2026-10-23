@@ -1,10 +1,3 @@
-The error happens because your GitHub Actions workflow is requesting Android NDK version `r28c`, but SCons is specifically hardcoded to look for the precise build version string **`28.1.13356709`** (which corresponds to NDK r28).
-
-To fix this, update your workflow file's `ndk-version` field to explicitly match the exact version string string `28.1.13356709`.
-
-Here is the corrected workflow file:
-
-```yaml
 name: Build Android arm32
 
 on:
